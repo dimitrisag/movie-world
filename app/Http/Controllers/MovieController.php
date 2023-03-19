@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Movie;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MovieController extends Controller
 {
@@ -13,7 +14,10 @@ class MovieController extends Controller
      */
     public function index()
     {
-        //
+        $data = Movie::all();
+        return $data;
+        return Inertia::render('Movies', ['data' => $data]);
+        
     }
 
     /**
@@ -47,7 +51,8 @@ class MovieController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $movie = Movie::find($id);
+    return Inertia::render('Movies', ['data' => $movie]);
     }
 
     /**
