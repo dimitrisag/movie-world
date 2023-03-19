@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VoteController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,8 +38,10 @@ Route::middleware('auth')->group(function () {
 
     
     Route::post('addMovie', [MovieController::class, 'store'])->name('addMovie');
+    Route::post('addVote', [VoteController::class, 'store'])->name('addVote');
 });
 Route::get('/movies', [MovieController::class, 'index'])->name('movies');
+Route::get('votes', [VoteController::class, 'index'])->name('votes');
 
 
 require __DIR__.'/auth.php';

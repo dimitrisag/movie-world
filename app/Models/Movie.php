@@ -20,4 +20,9 @@ class Movie extends Model
     {
         return $this->hasMany(Vote::class);
     }
+
+    public function getCreatedAtAttribute($value)
+    {
+        return date('d-m-Y H:i', strtotime($value));
+    }
 }

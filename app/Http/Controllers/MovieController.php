@@ -10,10 +10,18 @@ class MovieController extends Controller
 {
     public function index(Request $request)
     {
-        $data = Movie::query();
+        $data = Movie::withCount([
+            'votes as likes_count' => function ($query) {
+                $query->where('liked', true);
+            },
+            'votes as dislikes_count' => function ($query) {
+                $query->where('liked', false);
+            }
+        ])->with('user:id,name');
         if ($request->orderBy && $request->order) {
             $data = $data->orderBy($request->orderBy , $request->order);
         }
+        
         return response()->json($data->get());
     }
 

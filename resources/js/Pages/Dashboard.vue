@@ -10,10 +10,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <v-row class="py-6">
                 <v-col cols="12" sm="8">
-                    <Movies :items="movies" :key="componentKey" />
+                    <ul>
+                        <li v-for="movie in movies" :key="movie.id">
+                            <Movie :movie="movie" :key="componentKey" />
+                        </li>
+                    </ul>
                 </v-col>
                 <v-col cols="12" sm="4">
-                    <v-btn v-if="$page.props.auth.user" @click="handleDialog">New Movie</v-btn>
+                    <v-btn v-if="$page.props.auth.user" color="success" @click="handleDialog">New Movie</v-btn>
                     <v-card>
                         <v-card-title>Sort by</v-card-title>
                         <v-card-item>
@@ -46,6 +50,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import ModalForm from '../Components/ModalForm.vue';
 import Movies from './Movies.vue';
+import Movie from './Movie.vue'
 import HeaderMenu from '../Components/HeaderMenu.vue'
 import axios from 'axios';
 export default {
@@ -53,13 +58,14 @@ export default {
         AuthenticatedLayout,
         ModalForm,
         Movies,
-        HeaderMenu
+        HeaderMenu,
+        Movie
     },
     data: () => ({
         dialog: false,
         componentKey: 0,
         movies: [],
-        descOrder:false,
+        descOrder: false,
         params: {}
     }),
     mounted() {
@@ -79,17 +85,30 @@ export default {
         },
         handleCloseModal() {
             this.dialog = false
-            this.componentKey += 1
+            this.getData(this.params)
+
+
         },
         async getData(params) {
-            await axios.get(route('movies'), {params}).then(response => {
+            await axios.get(route('movies'), { params }).then(response => {
                 this.movies = response.data
+                console.log(response.data)
+                this.componentKey += 1
             })
         },
         sortBy(val) {
             this.descOrder = !this.descOrder
-            this.params.orderBy = val
-            if (this.descOrder) {this.params.order = 'asc'} else this.params.order = 'desc'
+            if (val === 'likes') {
+                this.params.orderBy = 'likes_count';
+            }
+            else if (val === 'hates') {
+                this.params.orderBy = 'dislikes_count';
+            }
+            else {
+                this.params.orderBy = val;
+            }
+            if (this.descOrder) { this.params.order = 'asc' } else {this.params.order = 'desc'}
+            this.componentKey += 1
             return
         }
     }
