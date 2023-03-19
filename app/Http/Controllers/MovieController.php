@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 
 class MovieController extends Controller
@@ -27,7 +29,17 @@ class MovieController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|string|max:255|unique:movies,title',
+            'description' => 'required|string|max:255'
+        ]);
+        $movie = Movie::create([
+            'title' =>$request->title,
+            'description' => $request->description,
+            'user_id' => $request->user_id
+        ]);
+
+        return redirect(RouteServiceProvider::HOME);
     }
 
     /**
