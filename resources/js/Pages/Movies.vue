@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul>
-            <li v-for="movie in movies" :key="movie.id">
+            <li v-for="movie in items" :key="movie.id">
                 <v-card>
                     <v-card-title>{{ movie.title }}</v-card-title>
                     <v-card-subtitle>Posted {{ movie.created_at }}</v-card-subtitle>
@@ -9,6 +9,11 @@
                     <div class="d-flex py-3 justify-space-between">
                         <v-list-item density="compact">
                             <v-list-item-subtitle>Likes | hates</v-list-item-subtitle>
+                        </v-list-item>
+
+                        <v-list-item density="compact">
+                            <v-btn>Like</v-btn>
+                            <v-btn>Hate</v-btn>
                         </v-list-item>
 
                         <v-list-item density="compact">
@@ -22,17 +27,7 @@
 </template>
  
 <script>
-import axios from 'axios';
 export default {
-    data: () => ({
-        movies: []
-    }),
-
-    mounted() {
-        axios.get(route('movies')).then(response => {
-            this.movies = response.data
-            console.log(response.data)
-        })
-    }
+    props: ['items'],
 }
 </script>
