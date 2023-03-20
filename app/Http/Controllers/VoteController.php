@@ -2,31 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Movie;
 use App\Models\Vote;
 use Illuminate\Http\Request;
 
 class VoteController extends Controller
 {
-    public function index(Request $request)
-    {
-        $likes = Vote::where('movie_id', $request->movie_id)
-            ->where('liked', true)
-            ->count();
-            
-        $hates = Vote::where('movie_id', $request->movie_id)
-            ->where('liked', false)
-            ->count();
-
-        $result = [
-            'likes' => $likes,
-            'hates' => $hates,
-        ];
-        return response()->json($result);
-    }
-
     public function store(Request $request)
     {
-
+        $movie = Movie::findOrFail($request->movie_id);
+        if ($movie->user_id ==$request->user_id) {
+            return response()->json('You cannot vote for a movie you posted');
+        }
         $vote = Vote::where('user_id', $request->user_id)
                     ->where('movie_id', $request->movie_id)
                     ->first();

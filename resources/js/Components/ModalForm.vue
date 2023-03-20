@@ -1,12 +1,12 @@
 <template>
-    <v-card>
+    <v-card width="400" class="mx-auto">
         <v-card-title>Insert new movie</v-card-title>
         <v-card-text>
             <v-sheet width="300" class="mx-auto">
                 <v-form @submit.prevent="submit">
                     <v-text-field v-model="title" label="Movie title"></v-text-field>
                     <v-textarea v-model="description" label="Movie description"></v-textarea>
-                    <v-btn type="submit" block class="mt-2">Submit</v-btn>
+                    <v-btn type="submit" block class="mt-2" color="success">Submit</v-btn>
                 </v-form>
             </v-sheet>
         </v-card-text>
@@ -21,6 +21,7 @@ export default {
         title: '',
         description: ''
     }),
+
     methods: {
         async submit() {
             const args = {
@@ -29,9 +30,7 @@ export default {
                 user_id: this.$page.props.auth.user.id
             }
             await axios.post(route('addMovie'), args).then(response => {
-                console.log(response)
                 this.$emit('closeModal')
-                
             }
             )
         }

@@ -1,37 +1,36 @@
 <template>
     <Head title="MovieWorld" />
     <HeaderMenu v-if="$page.props.auth.user">
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Movies</h2>
-        </template>
     </HeaderMenu>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <v-row class="py-6">
                 <v-col cols="12" sm="8">
-                    <ul>
+                    <ul :key="componentKey">
                         <li v-for="movie in movies" :key="movie.id">
-                            <Movie :movie="movie" :key="componentKey" />
+                            <Movie class="my-2" :movie="movie" :key="componentKey" @voteUpdated="getData(params)"/>
                         </li>
                     </ul>
                 </v-col>
                 <v-col cols="12" sm="4">
-                    <v-btn v-if="$page.props.auth.user" color="success" @click="handleDialog">New Movie</v-btn>
-                    <v-card>
+                    <v-btn v-if="$page.props.auth.user" prepend-icon="mdi-plus-box-multiple-outline" color="success" @click="handleDialog">New Movie</v-btn>
+                    <v-card class="my-4">
                         <v-card-title>Sort by</v-card-title>
                         <v-card-item>
-                            <v-btn rounded="pill" color="primary" @click="sortBy('likes')">
+                            <v-btn variant="outlined" prependIcon="mdi-thumb-up-outline" rounded="pill" color="primary"
+                                @click="sortBy('likes')">
                                 Likes
                             </v-btn>
                         </v-card-item>
                         <v-card-item>
-                            <v-btn rounded="pill" color="primary" @click="sortBy('hates')">
+                            <v-btn variant="outlined" prependIcon="mdi-thumb-down-outline" rounded="pill" color="primary"
+                                @click="sortBy('hates')">
                                 Hates
                             </v-btn>
                         </v-card-item>
                         <v-card-item>
-                            <v-btn rounded="pill" color="primary" @click="sortBy('created_at')">
+                            <v-btn variant="outlined" prependIcon="mdi-clipboard-text-clock" rounded="pill" color="primary" @click="sortBy('created_at')">
                                 Dates
                             </v-btn>
                         </v-card-item>
@@ -49,7 +48,6 @@
 <script>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import ModalForm from '../Components/ModalForm.vue';
-import Movies from './Movies.vue';
 import Movie from './Movie.vue'
 import HeaderMenu from '../Components/HeaderMenu.vue'
 import axios from 'axios';
@@ -57,7 +55,6 @@ export default {
     components: {
         AuthenticatedLayout,
         ModalForm,
-        Movies,
         HeaderMenu,
         Movie
     },
@@ -66,7 +63,7 @@ export default {
         componentKey: 0,
         movies: [],
         descOrder: false,
-        params: {}
+        params: {},
     }),
     mounted() {
         this.getData()
@@ -92,7 +89,6 @@ export default {
         async getData(params) {
             await axios.get(route('movies'), { params }).then(response => {
                 this.movies = response.data
-                console.log(response.data)
                 this.componentKey += 1
             })
         },
@@ -107,10 +103,10 @@ export default {
             else {
                 this.params.orderBy = val;
             }
-            if (this.descOrder) { this.params.order = 'asc' } else {this.params.order = 'desc'}
+            if (this.descOrder) { this.params.order = 'asc' } else { this.params.order = 'desc' }
             this.componentKey += 1
             return
-        }
+        },
     }
 }
 </script>

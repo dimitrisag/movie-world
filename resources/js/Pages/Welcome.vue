@@ -35,7 +35,6 @@
 
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
-import Movies from './Movies.vue'
 import Dashboard from './Dashboard.vue';
 
 defineProps({
@@ -43,7 +42,6 @@ defineProps({
     canRegister: Boolean,
     laravelVersion: String,
     phpVersion: String,
-    Movies,
     Dashboard
 });
 </script>
